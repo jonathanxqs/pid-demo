@@ -31,6 +31,9 @@
     var ki = 0.0001;
     var kd = 80.0;
 
+    var gravity = 0.2;
+    var gravityOn = true;
+
     var history = [];
     var historyTick = 0;
 
@@ -53,6 +56,9 @@
         var a = pid();
         var ax = a[0];
         var ay = a[1];
+        if (gravityOn) {
+            ay += gravity;
+        }
         var maxA = 0.2;
         ax = Math.max(Math.min(ax, maxA), -maxA);
         ay = Math.max(Math.min(ay, maxA), -maxA);
@@ -125,6 +131,7 @@
     var kpInput = document.getElementById("kp");
     var kiInput = document.getElementById("ki");
     var kdInput = document.getElementById("kd");
+    var gravityButton = document.getElementById("gravity");
 
     function updateCoefficients() {
         kp = parseFloat(kpInput.value);
@@ -134,12 +141,18 @@
         integralY = 0;
     }
 
+    function toggleGravity() {
+        gravityOn = !gravityOn;
+        gravityButton.innerText = 'Gravity ' + (gravityOn ? 'ON' : 'OFF');
+    }
+
     kpInput.addEventListener("blur", updateCoefficients);
     kiInput.addEventListener("blur", updateCoefficients);
     kdInput.addEventListener("blur", updateCoefficients);
+    gravityButton.addEventListener("click", toggleGravity);
 
     kpInput.value = kp;
     kiInput.value = ki;
     kdInput.value = kd;
-
+    toggleGravity();
 })();
